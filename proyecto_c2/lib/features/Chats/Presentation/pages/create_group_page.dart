@@ -52,7 +52,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
           StorageProviderRemoteDataSource.uploadFile(file: _image!)
               .then((value) {
-            print(value);
+            print("profileUrl");
             setState(() {
               _profileUrl = value;
             });
@@ -84,7 +84,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       key: _scaffoldState,
       appBar: AppBar(
         title: Text("Crear grupo"),
-        backgroundColor: greenColor,
+        backgroundColor: Color(0xFF0A6AA6),
       ),
       body: _bodyWidget(),
     );

@@ -44,8 +44,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: "Chat Anime",
+        title: "ARTECH",
         debugShowCheckedModeBanner: false,
+        color: primaryColor,
         initialRoute: '/',
         onGenerateRoute: OnGenerateRoute.route,
         routes: {

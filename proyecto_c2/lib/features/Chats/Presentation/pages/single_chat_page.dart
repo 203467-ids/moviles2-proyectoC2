@@ -17,10 +17,18 @@ import 'package:proyecto_c2/features/Chats/Presentation/cubit/chat/chat_cubit.da
 import 'package:proyecto_c2/features/Chats/Presentation/cubit/group/group_cubit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+
+const MAPBOX_ACCESS_TOKEN =
+    'pk.eyJ1IjoicGl0bWFjIiwiYSI6ImNsY3BpeWxuczJhOTEzbnBlaW5vcnNwNzMifQ.ncTzM4bW-jpq-hUFutnR1g';
 
 class SingleChatPage extends StatefulWidget {
   final SingleChatEntity singleChatEntity;
@@ -36,6 +44,9 @@ class _SingleChatPageState extends State<SingleChatPage> {
   late String vidurl;
   late String audiourl;
   String messageContent = "";
+  String? pdf;
+  String? message;
+  final GlobalKey<SfPdfViewerState> pdfViewerKey = GlobalKey();
   TextEditingController _messageController = TextEditingController();
   ScrollController _scrollController = ScrollController();
   bool _changeKeyboardType = false;
@@ -49,6 +60,8 @@ class _SingleChatPageState extends State<SingleChatPage> {
     _messageController.addListener(() {
       setState(() {});
     });
+    getCurrentLocation();
+    super.initState();
 
     BlocProvider.of<ChatCubit>(context)
         .getMessages(channelId: widget.singleChatEntity.groupId);
@@ -62,6 +75,108 @@ class _SingleChatPageState extends State<SingleChatPage> {
     _vidController?.dispose();
     _audioPlayer.dispose();
     super.dispose();
+  }
+
+  late double lat = 0.0;
+  late double long = 0.0;
+  LatLng? myPosition;
+
+  Future<Position> determinePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('error');
+      }
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void getCurrentLocation() async {
+    Position position = await determinePosition();
+    setState(() {
+      lat = position.latitude;
+      long = position.longitude;
+    });
+  }
+
+  Future<void> _openMap(String location) async {
+    List<String> coordenadasSeparadas = location.split('|');
+
+    double variable1 = double.parse(coordenadasSeparadas[0]);
+    double variable2 = double.parse(coordenadasSeparadas[1]);
+    print("$variable1|$variable2");
+    myPosition = LatLng(variable1, variable2);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text("Ubicación en el Mapa"),
+            backgroundColor: Colors.blueAccent,
+          ),
+          body: myPosition == null
+              ? const CircularProgressIndicator()
+              : FlutterMap(
+                  options: MapOptions(
+                      center: myPosition, minZoom: 17, maxZoom: 25, zoom: 18),
+                  nonRotatedChildren: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+                      additionalOptions: const {
+                        'accessToken': MAPBOX_ACCESS_TOKEN,
+                        'id': 'mapbox/outdoors-v12'
+                      },
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: myPosition!,
+                          builder: (context) {
+                            return Container(
+                              child: const Icon(
+                                Icons.person_pin,
+                                color: Colors.red,
+                                size: 40,
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                    )
+                  ],
+                ),
+        ),
+      ),
+    );
+
+    /*print("Variable 1: $variable1");
+    print("Variable 2: $variable2");
+    String googleURL =
+        'https://www.google.com/maps/search/?api=1&query=$variable1,$variable2';
+    var uri = Uri.parse(googleURL);
+    await canLaunchUrl(uri) ? await launchUrl(uri) : throw 'nopu';*/
+  }
+
+  void _launchPDF(String pdfUrl) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text("PDF Viewer"),
+          ),
+          body: SfPdfViewer.network(
+            //filePath: pdfUrl,
+            pdfUrl,
+            key: UniqueKey(),
+            // Puedes agregar más propiedades según tus necesidades
+          ),
+        ),
+      ),
+    );
   }
 
   check() {}
@@ -206,10 +321,115 @@ class _SingleChatPageState extends State<SingleChatPage> {
                               ),
                             )
                           : Text(""),
+                      const SizedBox(
+                        width: 10,
+                      ),
                     ],
                   ),
-                  SizedBox(
-                    width: 15,
+                  GestureDetector(
+                    onTap: () async {
+                      FilePickerResult? filePickerResult =
+                          await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['pdf'],
+                      );
+
+                      if (filePickerResult != null) {
+                        String url = await uploadFile(
+                          'pdfs/${filePickerResult.files.single.name}',
+                          File(filePickerResult.files.single.path!),
+                        );
+                        setState(() {
+                          message = null;
+                          pdf = url;
+                        });
+                      } else {
+                        setState(() {
+                          message = 'No se seleccionó ningún PDF';
+                        });
+                      }
+                      BlocProvider.of<ChatCubit>(context).sendTextMessage(
+                          textMessageEntity: TextMessageEntity(
+                              time: Timestamp.now(),
+                              senderId: widget.singleChatEntity.uid,
+                              content: pdf,
+                              senderName: widget.singleChatEntity.username,
+                              type: "PDF"),
+                          channelId: widget.singleChatEntity.groupId);
+                      BlocProvider.of<GroupCubit>(context).updateGroup(
+                          groupEntity: GroupEntity(
+                        groupId: widget.singleChatEntity.groupId,
+                        lastMessage: _messageController.text,
+                        creationTime: Timestamp.now(),
+                      ));
+                    },
+                    child: Icon(
+                      LineIcons.pdfFile,
+                      color: const Color.fromRGBO(0, 183, 247, 1),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      // FilePickerResult? filePickerResult =
+                      //     await FilePicker.platform.pickFiles(
+                      //   type: FileType.custom,
+                      //   allowedExtensions: ['pdf'],
+                      // );
+
+                      // if (filePickerResult != null) {
+                      //   String url = await uploadFile(
+                      //     'pdfs/${filePickerResult.files.single.name}',
+                      //     File(filePickerResult.files.single.path!),
+                      //   );
+                      //   setState(() {
+                      //     message = null;
+                      //     pdf = url;
+                      //   });
+                      // } else {
+                      //   setState(() {
+                      //     message = 'No se seleccionó ningún PDF';
+                      //   });
+                      // }
+                      // BlocProvider.of<ChatCubit>(context).sendTextMessage(
+                      //     textMessageEntity: TextMessageEntity(
+                      //         time: Timestamp.now(),
+                      //         senderId: widget.singleChatEntity.uid,
+                      //         content: pdf,
+                      //         senderName: widget.singleChatEntity.username,
+                      //         type: "PDF"),
+                      //     channelId: widget.singleChatEntity.groupId);
+                      // BlocProvider.of<GroupCubit>(context).updateGroup(
+                      //     groupEntity: GroupEntity(
+                      //   groupId: widget.singleChatEntity.groupId,
+                      //   lastMessage: _messageController.text,
+                      //   creationTime: Timestamp.now(),
+                      // ));
+                      print('gola');
+
+                      String location = "$lat|$long";
+                      print(location);
+                      BlocProvider.of<ChatCubit>(context).sendTextMessage(
+                          textMessageEntity: TextMessageEntity(
+                              time: Timestamp.now(),
+                              senderId: widget.singleChatEntity.uid,
+                              content: location,
+                              senderName: widget.singleChatEntity.username,
+                              type: "LOCATION"),
+                          channelId: widget.singleChatEntity.groupId);
+                      BlocProvider.of<GroupCubit>(context).updateGroup(
+                          groupEntity: GroupEntity(
+                        groupId: widget.singleChatEntity.groupId,
+                        lastMessage: _messageController.text,
+                        creationTime: Timestamp.now(),
+                      ));
+                    },
+                    child: Icon(
+                      LineIcons.locationArrow,
+                      color: const Color.fromRGBO(0, 183, 247, 1),
+                    ),
                   ),
                 ],
               ),
@@ -354,6 +574,30 @@ class _SingleChatPageState extends State<SingleChatPage> {
                 nip: BubbleNip.rightTop,
                 url: message.content,
               );
+            } else if (message.type == 'PDF') {
+              return _pdfLayout(
+                name: "Yo",
+                alignName: TextAlign.end,
+                color: const Color.fromRGBO(142, 142, 142, 1),
+                time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                align: TextAlign.left,
+                boxAlign: CrossAxisAlignment.start,
+                crossAlign: CrossAxisAlignment.end,
+                nip: BubbleNip.rightTop,
+                url: message.content,
+              );
+            } else if (message.type == 'LOCATION') {
+              return _locationLayout(
+                name: "Yo",
+                alignName: TextAlign.end,
+                color: const Color.fromRGBO(142, 142, 142, 1),
+                time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                align: TextAlign.left,
+                boxAlign: CrossAxisAlignment.start,
+                crossAlign: CrossAxisAlignment.end,
+                nip: BubbleNip.rightTop,
+                location: message.content,
+              );
             }
           } else {
             // ignore: curly_braces_in_flow_control_structures
@@ -406,6 +650,30 @@ class _SingleChatPageState extends State<SingleChatPage> {
                 crossAlign: CrossAxisAlignment.start,
                 nip: BubbleNip.leftTop,
                 url: message.content,
+              );
+            } else if (message.type == 'PDF') {
+              return _pdfLayout(
+                color: const Color.fromRGBO(74, 77, 78, 1),
+                name: "${message.senderName}",
+                alignName: TextAlign.end,
+                time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                align: TextAlign.left,
+                boxAlign: CrossAxisAlignment.start,
+                crossAlign: CrossAxisAlignment.start,
+                nip: BubbleNip.leftTop,
+                url: message.content,
+              );
+            } else if (message.type == 'LOCATION') {
+              return _locationLayout(
+                color: const Color.fromRGBO(74, 77, 78, 1),
+                name: "${message.senderName}",
+                alignName: TextAlign.end,
+                time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                align: TextAlign.left,
+                boxAlign: CrossAxisAlignment.start,
+                crossAlign: CrossAxisAlignment.start,
+                nip: BubbleNip.leftTop,
+                location: message.content,
               );
             }
           }
@@ -662,6 +930,124 @@ class _SingleChatPageState extends State<SingleChatPage> {
                     time,
                     textAlign: align,
                     style: TextStyle(
+                      fontSize: 12,
+                      color: Color.fromRGBO(247, 252, 252, 1),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _pdfLayout({
+    url,
+    time,
+    color,
+    align,
+    boxAlign,
+    nip,
+    crossAlign,
+    String? name,
+    alignName,
+  }) {
+    print(url);
+    return Column(
+      crossAxisAlignment: crossAlign,
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.90,
+          ),
+          child: Container(
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.all(3),
+            child: Bubble(
+              color: color,
+              nip: nip,
+              child: Column(
+                crossAxisAlignment: crossAlign,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "$name",
+                    textAlign: alignName,
+                    style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(132, 200, 255, 1)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _launchPDF(url); // Lanzar la función para abrir el PDF
+                    },
+                    child: Text('Abrir PDF'),
+                  ),
+                  Text(
+                    time,
+                    textAlign: align,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color.fromRGBO(247, 252, 252, 1),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _locationLayout({
+    location,
+    time,
+    color,
+    align,
+    boxAlign,
+    nip,
+    crossAlign,
+    String? name,
+    alignName,
+  }) {
+    return Column(
+      crossAxisAlignment: crossAlign,
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.90,
+          ),
+          child: Container(
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.all(3),
+            child: Bubble(
+              color: color,
+              nip: nip,
+              child: Column(
+                crossAxisAlignment: crossAlign,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "$name",
+                    textAlign: alignName,
+                    style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(132, 200, 255, 1)),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        _openMap(location);
+                      },
+                      child: const Text('Ver ubicacion')),
+                  Text(
+                    time,
+                    textAlign: align,
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Color.fromRGBO(247, 252, 252, 1),
                     ),

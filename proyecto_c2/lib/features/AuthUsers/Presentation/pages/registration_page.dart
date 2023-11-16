@@ -50,7 +50,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           _image = File(pickedFile.path);
           StorageProviderRemoteDataSource.uploadFile(file: _image!)
               .then((value) {
-            print(value);
+            print("profileUrl");
             setState(() {
               _profileUrl = value;
             });
@@ -121,10 +121,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget _bodyWidget() {
     return SingleChildScrollView(
       child: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/3.jpg'), fit: BoxFit.fill)),
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 68),
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 35),
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -133,11 +130,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             Container(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Sign In',
+                  'Registro',
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 35,
                       fontWeight: FontWeight.w700,
-                      color: Colors.green),
+                      color: darkPrimaryColor),
                 )),
             SizedBox(
               height: 10,
@@ -169,7 +166,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     height: 12,
                   ),
                   Text(
-                    '\u{2795}foto de perfil',
+                    'Agregar una foto de perfil',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -199,11 +196,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
             SizedBox(
               height: 17,
             ),
+            Divider(
+              thickness: 2,
+              indent: 100,
+              endIndent: 100,
+            ),
+            SizedBox(
+              height: 17,
+            ),
             Container(
               height: 44,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(.2),
+                  color: color747480.withOpacity(.2),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: TextField(
                 obscureText: _isShowPassword,
@@ -231,7 +236,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               height: 44,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(.2),
+                  color: color747480.withOpacity(.2),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: TextField(
                 obscureText: _isShowPassword,
@@ -263,7 +268,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               child: Container(
                 height: 45,
                 decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(.2),
+                    color: color747480.withOpacity(.2),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: AbsorbPointer(
                   child: TextField(
@@ -286,7 +291,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               child: Container(
                 height: 45,
                 decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(.2),
+                    color: color747480.withOpacity(.2),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: AbsorbPointer(
                   child: TextField(
@@ -314,7 +319,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Color.fromRGBO(18, 221, 184, 1),
+                  color: Color.fromRGBO(18, 169, 221, 1),
                 ),
                 child: Text(
                   'Registrarme',
@@ -367,7 +372,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black),
+                        color: colorC1C1C1),
                   ),
                   Text(
                     'los términos ',
@@ -388,7 +393,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black),
+                        color: colorC1C1C1),
                   ),
                   Text(
                     'condiciones ',
@@ -402,7 +407,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black),
+                        color: colorC1C1C1),
                   ),
                 ],
               ),
@@ -675,7 +680,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         dob: _dobController.text,
         password: _passwordController.text,
         isOnline: false,
-        status: "i love anime",
+        status: "Hola! Estoy usando esta aplicación :)",
       ),
     );
   }

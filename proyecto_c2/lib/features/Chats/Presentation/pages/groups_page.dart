@@ -18,7 +18,7 @@ class GroupsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 18, 111, 3),
+        backgroundColor: Color(0xFF0A6AA6),
         onPressed: () {
           Navigator.pushNamed(context, PageConst.createGroupPage,
               arguments: uid);

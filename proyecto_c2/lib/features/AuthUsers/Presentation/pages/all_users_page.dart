@@ -38,12 +38,12 @@ class _AllUsersPageState extends State<AllUsersPage> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                /*Icon(
+                                Icon(
                                   Icons.group,
                                   size: 40,
                                   color: Color.fromARGB(255, 0, 0, 0)
                                       .withOpacity(.4),
-                                ),*/
+                                ),
                                 SizedBox(
                                   height: 10,
                                 ),

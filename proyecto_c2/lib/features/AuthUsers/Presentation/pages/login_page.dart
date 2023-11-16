@@ -6,7 +6,6 @@ import 'package:proyecto_c2/features/AuthUsers/Presentation/widgets/common.dart'
 import 'package:proyecto_c2/features/AuthUsers/Presentation/widgets/theme/style.dart';
 import 'package:proyecto_c2/page_const.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:animate_do/animate_do.dart';
 
 import 'home_page.dart';
 
@@ -73,40 +72,21 @@ class _LoginPageState extends State<LoginPage> {
   _bodyWidget() {
     return SingleChildScrollView(
       child: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/fondo.jpg'), fit: BoxFit.fill)),
-        padding: EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 32),
         child: Column(
           children: <Widget>[
-            const SizedBox(
-              height: 90,
+            SizedBox(
+              height: 20,
             ),
-            Bounce(
-              duration: Duration(seconds: 3),
-              infinite: true,
-              child: Container(
-                  width: 400.00,
-                  height: 300.00,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: ExactAssetImage('assets/logo.png'),
-                      fit: BoxFit.fitWidth,
-                    ),
-                  )),
-            ),
-
             Container(
                 alignment: Alignment.topLeft,
-                child: FadeInLeft(
-                    child: Text(
-                  'Loggin',
+                child: Text(
+                  'Iniciar sesión',
                   style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.green,
-                  ),
-                ))),
+                      fontSize: 35,
+                      fontWeight: FontWeight.w700,
+                      color: darkPrimaryColor),
+                )),
             SizedBox(
               height: 10,
             ),
@@ -128,10 +108,8 @@ class _LoginPageState extends State<LoginPage> {
                 color: color747480.withOpacity(.2),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              child: FadeInRight(
-                  child: TextField(
+              child: TextField(
                 controller: _emailController,
-                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.email,
@@ -144,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontWeight: FontWeight.w400),
                   border: InputBorder.none,
                 ),
-              )),
+              ),
             ),
             SizedBox(
               height: 10,
@@ -156,11 +134,9 @@ class _LoginPageState extends State<LoginPage> {
                 color: color747480.withOpacity(.2),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              child: FadeInRight(
-                  child: TextField(
+              child: TextField(
                 obscureText: _isShowPassword,
                 controller: _passwordController,
-                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.lock,
@@ -183,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                           ? Icons.remove_red_eye
                           : Icons.panorama_fish_eye)),
                 ),
-              )),
+              ),
             ),
             SizedBox(
               height: 8,
@@ -195,9 +171,9 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pushNamed(context, PageConst.forgotPage);
                 },
                 child: Text(
-                  '¿Olvide mi contraseña?',
+                  '¿No recuerdas tu contraseña?',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: darkPrimaryColor,
                       fontSize: 16,
                       fontWeight: FontWeight.w700),
                 ),
@@ -215,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 44,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(18, 221, 184, 1),
+                  color: Color.fromRGBO(18, 169, 221, 1),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Text(
@@ -235,11 +211,8 @@ class _LoginPageState extends State<LoginPage> {
               child: Row(
                 children: <Widget>[
                   Text(
-                    "¿No estas Registrado?",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                    "¿Aún no tienes cuenta?",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(
                     width: 5,
@@ -250,11 +223,11 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.pushNamed(context, PageConst.registrationPage);
                     },
                     child: Text(
-                      ' Registrate',
+                      ' Crea una',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: Colors.green),
+                          color: darkPrimaryColor),
                     ),
                   ),
                 ],
@@ -270,11 +243,9 @@ class _LoginPageState extends State<LoginPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Registarse con: ",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.blueAccent),
+                      "O intenta con:",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -287,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(
-                          color: Color.fromRGBO(238, 22, 15, 1),
+                          color: Color.fromRGBO(66, 133, 244, 1),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(

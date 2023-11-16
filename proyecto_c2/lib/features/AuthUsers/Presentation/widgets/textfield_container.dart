@@ -7,14 +7,14 @@ class TextFieldContainer extends StatelessWidget {
   final String? hintText;
   final IconData? prefixIcon;
   final TextInputType? keyboardType;
-  const TextFieldContainer({
-    Key? key,
-    this.keyboardType,
-    this.prefixIcon,
-    this.hintText,
-    this.controller,
-    this.isObscureText,
-  }) : super(key: key);
+  const TextFieldContainer(
+      {Key? key,
+      this.keyboardType,
+      this.prefixIcon,
+      this.hintText,
+      this.controller,
+      this.isObscureText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class TextFieldContainer extends StatelessWidget {
       height: 45,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          color: Colors.black.withOpacity(.2),
+          color: color747480.withOpacity(.2),
           borderRadius: BorderRadius.all(Radius.circular(10))),
       child: TextField(
         obscureText: isObscureText == true ? true : false,

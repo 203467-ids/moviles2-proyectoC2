@@ -56,8 +56,10 @@ dependencies:
   file_picker: ^5.0.0
   video_thumbnail: ^0.5.3
   url_launcher: ^6.1.11
-  animate_do: ^3.0.2
-
+  syncfusion_flutter_pdfviewer: ^21.2.9
+  geolocator: ^9.0.2
+  flutter_map: ^3.1.0
+  latlong2: ^0.8.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -83,8 +85,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - assets/logo.png
-    - assets/fondo.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

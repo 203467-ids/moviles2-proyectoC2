@@ -10,7 +10,6 @@ import 'package:proyecto_c2/features/AuthUsers/Presentation/widgets/customTabBar
 import 'package:proyecto_c2/features/AuthUsers/Presentation/widgets/theme/style.dart';
 import 'package:proyecto_c2/features/Chats/Presentation/cubit/group/group_cubit.dart';
 import 'package:proyecto_c2/features/Chats/Presentation/pages/groups_page.dart';
-import 'package:animate_do/animate_do.dart';
 
 class HomePage extends StatefulWidget {
   final String uid;
@@ -60,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  /*_buildSearchField() {
+  _buildSearchField() {
     return Container(
       margin: EdgeInsets.only(top: 25),
       height: 40,
@@ -91,29 +90,17 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(fontSize: 16.0),
       ),
     );
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
+      appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: _isSearch == false
-            ? Color.fromARGB(255, 18, 111, 3)
-            : Colors.transparent,
+        backgroundColor:
+            _isSearch == false ? Color(0xFF0A6AA6) : Colors.transparent,
         title: _isSearch == false
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FadeInLeftBig(
-                    child: Image.asset(
-                      'assets/logo.png',
-                      fit: BoxFit.contain,
-                      height: 170,
-                    ),
-                  )
-                ],
-              )
+            ? Text("ARTECH")
             : Container(
                 height: 0.0,
                 width: 0.0,
@@ -154,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ]
             : [],
-      ),*/
+      ),
       body: Container(
         child: Column(
           children: [

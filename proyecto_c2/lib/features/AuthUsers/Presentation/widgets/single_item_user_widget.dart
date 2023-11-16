@@ -19,7 +19,7 @@ class SingleItemStoriesStatusWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  /*Container(
+                  Container(
                     width: 55,
                     height: 55,
                     decoration: BoxDecoration(
@@ -28,7 +28,7 @@ class SingleItemStoriesStatusWidget extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(50)),
                       child: profileWidget(imageUrl: user.profileUrl),
                     ),
-                  ),*/
+                  ),
                   SizedBox(
                     width: 10,
                   ),
@@ -38,18 +38,18 @@ class SingleItemStoriesStatusWidget extends StatelessWidget {
                       children: [
                         Text(
                           "${user.name}",
-                          /*  style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),*/
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
                           height: 5,
                         ),
-                        /*Text(
+                        Text(
                           user.status == null || user.status == ""
                               ? "Hi! I'm using this app"
                               : "${user.status}",
                           overflow: TextOverflow.ellipsis,
-                        ),*/
+                        ),
                       ],
                     ),
                   )
@@ -59,9 +59,9 @@ class SingleItemStoriesStatusWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 60, right: 10),
-            /*child: Divider(
+            child: Divider(
               thickness: 1.50,
-            ),*/
+            ),
           ),
         ],
       ),

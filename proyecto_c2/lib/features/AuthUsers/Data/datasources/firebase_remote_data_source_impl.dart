@@ -58,10 +58,7 @@ class AuthFirebaseRemoteDataSourceImpl implements AuthFirebaseRemoteDataSource {
 
   @override
   Stream<List<UserEntity>> getAllUsers() {
-    // ignore: avoid_print
-    print("Obteniendo usuarios");
     final userCollection = fireStore.collection("users");
-
     return userCollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList());
   }

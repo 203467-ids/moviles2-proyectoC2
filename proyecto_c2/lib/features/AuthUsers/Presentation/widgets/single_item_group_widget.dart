@@ -23,17 +23,16 @@ class SingleItemGroupWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    /* Container(
+                    Container(
                       width: 55,
                       height: 55,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(50))),
-                      child: /*ClipRRect(
+                      child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(50)),
                         child: profileWidget(imageUrl: group.groupProfileImage),
-                      ),*/
-                          Text("fotito"),
-                    ),*/
+                      ),
+                    ),
                     SizedBox(
                       width: 10,
                     ),
@@ -43,18 +42,18 @@ class SingleItemGroupWidget extends StatelessWidget {
                         children: [
                           Text(
                             "${group.groupName}",
-                            /*style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),*/
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w500),
                           ),
                           SizedBox(
                             height: 5,
                           ),
-                          /*Text(
+                          Text(
                             group.lastMessage == null || group.lastMessage == ""
                                 ? "${group.groupName}"
                                 : "${group.lastMessage}",
                             overflow: TextOverflow.ellipsis,
-                          ),*/
+                          ),
                         ],
                       ),
                     )
@@ -64,9 +63,9 @@ class SingleItemGroupWidget extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 60, right: 10),
-              /*child: Divider(
+              child: Divider(
                 thickness: 1.50,
-              ),*/
+              ),
             ),
           ],
         ),

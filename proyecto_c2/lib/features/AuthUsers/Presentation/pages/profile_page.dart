@@ -60,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
           _image = File(pickedFile.path);
           StorageProviderRemoteDataSource.uploadFile(file: _image!)
               .then((value) {
-            print(value);
+            print("profileUrl");
             setState(() {
               _profileUrl = value;
             });

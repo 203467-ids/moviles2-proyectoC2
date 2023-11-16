@@ -22,7 +22,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 18, 111, 3),
+        color: Color(0xFF0A6AA6),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,7 +30,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
           Expanded(
             child: TabBarCustomButton(
               width: 50,
-              text: "Grupos",
+              text: "Groups",
               textColor: widget.index == 0 ? textIconColor : textIconColorGray,
               borderColor:
                   widget.index == 0 ? textIconColor : Colors.transparent,
@@ -44,7 +44,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
           ),
           Expanded(
             child: TabBarCustomButton(
-              text: "Usuarios",
+              text: "Users",
               textColor: widget.index == 1 ? textIconColor : textIconColorGray,
               borderColor:
                   widget.index == 1 ? textIconColor : Colors.transparent,
@@ -58,7 +58,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
           ),
           Expanded(
             child: TabBarCustomButton(
-              text: "Perfil",
+              text: "Profile",
               textColor: widget.index == 2 ? textIconColor : textIconColorGray,
               borderColor:
                   widget.index == 2 ? textIconColor : Colors.transparent,
